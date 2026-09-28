@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#f2f2f7">
+    <title>菜鱼狗 · 控制台</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <div class="bg-grid"></div>
+
+    <header class="topbar">
+        <div class="topbar-brand">
+            <img class="brand-icon" src="favicon.svg" alt="">
+            <span class="brand-text">菜鱼狗</span>
+        </div>
+        <div class="topbar-status">
+            <span class="ws-dot" id="dot"></span>
+            <span id="ws-label">连接中</span>
+            <span class="sep">·</span>
+            <span id="latency">-- ms</span>
+            <span class="sep">·</span>
+            <span id="board-name">--</span>
+        </div>
+    </header>
+
+    <nav class="tabbar" id="tabbar">
+        <button class="tab active" data-tab="drive"><span class="tab-ico">🕹️</span>遥控</button>
+        <button class="tab" data-tab="emotion"><span class="tab-ico">😊</span>表情</button>
+        <button class="tab" data-tab="lamp"><span class="tab-ico">💡</span>灯光</button>
+        <button class="tab" data-tab="settings"><span class="tab-ico">⚙️</span>设置</button>
+    </nav>
+
+    <main class="panels">
+        <section class="panel active" id="panel-drive">
+            <div class="section-label">对话</div>
+            <button class="pill full" id="btn-chat">
+                <span class="pill-ico" id="chat-ico">🎤</span><span id="chat-label">唤醒对话</span>
+            </button>
+            <div class="status-line" id="chat-status">对话状态：--</div>
+
+            <div class="section-label">遥控</div>
+            <div class="joystick-container">
+                <div class="joy-bg" id="joy-bg">
+                    <div class="joy-cross-h"></div>
+                    <div class="joy-cross-v"></div>
+                    <div class="joy-ring" id="joy-ring"></div>
+                    <div class="joy-thumb" id="joy-thumb">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M12 1v5m0 12v5M1 12h5m12 0h5"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="joy-info">
+                    <span id="joy-dir">松开</span>
+                </div>
+            </div>
+
+            <button class="pill accent-off full" id="btn-stand">
+                <span class="pill-ico">⏹</span><span>停下（站立）</span>
+            </button>
+
+            <div class="section-label">动作</div>
+            <div class="hint action-hint">点一下让小狗活动起来吧！</div>
+
+            <section class="grid" id="action-grid"></section>
+
+            <div class="section-label">动作速度</div>
+            <div class="card">
+                <div class="bright-row">
+                    <input type="range" id="action-speed" min="0" max="100" step="1" value="50">
+                    <span class="rgb-val" id="speed-val">1.0×</span>
+                </div>
+            </div>
+
+            <div class="status-line" id="action-status">当前动作：idle</div>
+        </section>
+
+        <section class="panel" id="panel-emotion">
+            <div class="toolbar">
+                <button class="pill" id="btn-auto" title="退出预览，恢复随设备状态自动切换">
+                    <span class="pill-ico">↩</span>
+                    <span>跟随设备状态</span>
+                </button>
+                <span class="hint" id="mode-hint">点击表情即可在屏幕上预览</span>
+            </div>
+
+            <section class="grid" id="grid"></section>
+        </section>
+
+        <section class="panel" id="panel-lamp">
+            <div class="section-label">灯效</div>
+            <div class="effects" id="effects">
+                <button class="pill effect" data-action="on">
+                    <span class="pill-ico">💡</span><span>常亮</span>
+                </button>
+                <button class="pill effect" data-action="breathe">
+                    <span class="pill-ico">🌊</span><span>呼吸</span>
+                </button>
+                <button class="pill effect" data-action="rainbow">
+                    <span class="pill-ico">🌈</span><span>彩虹</span>
+                </button>
+                <button class="pill effect" data-action="flow">
+                    <span class="pill-ico">✨</span><span>流水</span>
+                </button>
+                <button class="pill effect" data-action="flash">
+                    <span class="pill-ico">⚡</span><span>闪烁</span>
+                </button>
+                <button class="pill effect accent-off" data-action="off">
+                    <span class="pill-ico">⏹</span><span>关灯</span>
+                </button>
+            </div>
+
+            <div class="section-label">颜色</div>
+            <div class="card">
+                <div class="color-head">
+                    <input type="color" id="led-color" value="#ff6b35">
+                    <span class="color-hex" id="color-hex">#FF6B35</span>
+                </div>
+                <div class="rgb-row">
+                    <span class="rgb-label r">R</span>
+                    <input type="range" id="led-r" min="0" max="255" value="255">
+                    <span class="rgb-val" id="r-val">255</span>
+                </div>
+                <div class="rgb-row">
+                    <span class="rgb-label g">G</span>
+                    <input type="range" id="led-g" min="0" max="255" value="107">
+                    <span class="rgb-val" id="g-val">107</span>
+                </div>
+                <div class="rgb-row">
+                    <span class="rgb-label b">B</span>
+                    <input type="range" id="led-b" min="0" max="255" value="53">
+                    <span class="rgb-val" id="b-val">53</span>
+                </div>
+            </div>
+
+            <div class="section-label">亮度</div>
+            <div class="card">
+                <div class="bright-row">
+                    <input type="range" id="led-brightness" min="5" max="100" value="80">
+                    <span class="rgb-val" id="brightness-val">80%</span>
+                </div>
+            </div>
+
+            <div class="section-label">灯效速度</div>
+            <div class="card">
+                <div class="bright-row">
+                    <input type="range" id="lamp-speed" min="0" max="100" step="1" value="50">
+                    <span class="rgb-val" id="lamp-speed-val">1.0×</span>
+                </div>
+            </div>
+
+            <div class="status-line" id="lamp-status">灯光状态：--</div>
+        </section>
+
+        <section class="panel" id="panel-settings">
+            <div class="section-label">舵机微调</div>
+            <div class="hint action-hint">
+                校正舵机臂没装正带来的偏差：拖滑块（或在右边的框里直接敲数值）时，
+                对应那条腿会立刻动一点；满意后点「保存到设备」。
+            </div>
+            <div class="card">
+                <div class="rgb-row trim-row">
+                    <span class="rgb-label">左前</span>
+                    <input type="range" id="trim-0" min="-20" max="20" step="1" value="0">
+                    <span class="trim-value">
+                        <input type="number" class="trim-input" id="trim-inp-0" min="-20" max="20"
+                               step="1" value="0" inputmode="numeric" aria-label="左前腿微调角度">
+                        <span class="trim-unit">°</span>
+                    </span>
+                </div>
+                <div class="rgb-row trim-row">
+                    <span class="rgb-label">右前</span>
+                    <input type="range" id="trim-1" min="-20" max="20" step="1" value="0">
+                    <span class="trim-value">
+                        <input type="number" class="trim-input" id="trim-inp-1" min="-20" max="20"
+                               step="1" value="0" inputmode="numeric" aria-label="右前腿微调角度">
+                        <span class="trim-unit">°</span>
+                    </span>
+                </div>
+                <div class="rgb-row trim-row">
+                    <span class="rgb-label">左后</span>
+                    <input type="range" id="trim-2" min="-20" max="20" step="1" value="0">
+                    <span class="trim-value">
+                        <input type="number" class="trim-input" id="trim-inp-2" min="-20" max="20"
+                               step="1" value="0" inputmode="numeric" aria-label="左后腿微调角度">
+                        <span class="trim-unit">°</span>
+                    </span>
+                </div>
+                <div class="rgb-row trim-row">
+                    <span class="rgb-label">右后</span>
+                    <input type="range" id="trim-3" min="-20" max="20" step="1" value="0">
+                    <span class="trim-value">
+                        <input type="number" class="trim-input" id="trim-inp-3" min="-20" max="20"
+                               step="1" value="0" inputmode="numeric" aria-label="右后腿微调角度">
+                        <span class="trim-unit">°</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <button class="pill accent-off" id="btn-trim-save">
+                    <span class="pill-ico">💾</span><span>保存到设备</span>
+                </button>
+                <button class="pill" id="btn-trim-reset">
+                    <span class="pill-ico">↺</span><span>全部归零</span>
+                </button>
+            </div>
+            <div class="status-line" id="trim-status">舵机微调：--</div>
+
+            <div class="credit-line">固件作者：菜鱼的DIY</div>
+
+            <div class="log-head">
+                <span class="section-label">运行日志</span>
+                <button class="link" id="btn-clear">清空</button>
+            </div>
+            <div class="log" id="log"></div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

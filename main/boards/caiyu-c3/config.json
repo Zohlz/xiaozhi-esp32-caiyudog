@@ -1,0 +1,14 @@
+{
+    "type": "caiyu-c3",
+    "target": "esp32c3",
+    "builds": [
+        {
+            "name": "caiyu-c3",
+            "sdkconfig_append": [
+                "CONFIG_HTTPD_WS_SUPPORT=y",
+                "CONFIG_AUDIO_MAX_DECODE_PACKETS=20",
+                "CONFIG_LWIP_MAX_SOCKETS=16"
+            ]
+        }
+    ]
+}
